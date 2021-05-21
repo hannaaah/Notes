@@ -1,17 +1,24 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:notes/model/note_model.dart';
+import 'package:notes/model/dialogbox.dart';
+import 'package:notes/model/icon.dart';
 import 'package:notes/note_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NewNote extends StatelessWidget {
-  final TextEditingController titlecontroller = TextEditingController();
-  final TextEditingController bodycontroller = TextEditingController();
+  final TextEditingController titlecontroller =
+      TextEditingController(text: Get.parameters['title']);
+  final TextEditingController bodycontroller =
+      TextEditingController(text: Get.parameters['body']);
 
-  final NoteModel note = Get.arguments;
+  final bool isEdit = Get.parameters['body'] != null;
+
+  final int index = (Get.parameters['index'] == null)
+      ? 0
+      : int.parse(Get.parameters['index']);
 
   final controller = Get.find<NoteController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,57 +27,38 @@ class NewNote extends StatelessWidget {
         elevation: 0,
         backgroundColor: Color(0xff313131),
         actions: [
-          // ignore: unrelated_type_equality_checks
-          bodycontroller.text == null
-              ? SizedBox()
-              : (Padding(
-                  padding: EdgeInsets.all(10),
-                  child: FlatButton(
-                    child: Text(
-                      "SAVE",
-                      style: GoogleFonts.aBeeZee(
-                          color: Color(0xffFFD346), fontSize: 18),
-                    ),
-                    onPressed: () {
-                      Get.defaultDialog(
-                          radius: 26,
-                          backgroundColor: Colors.grey[900],
-                          middleText: "Do you want to save the Note?",
-                          middleTextStyle: GoogleFonts.varelaRound(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                          title: "",
-                          cancel: FlatButton(
-                            child: Text(
-                              "DISCARD",
-                              style: GoogleFonts.aBeeZee(
-                                  color: Colors.white, fontSize: 15),
+          Padding(
+              padding: EdgeInsets.all(10),
+              child: FlatButton(
+                  child: Text(
+                    "SAVE",
+                    style: GoogleFonts.aBeeZee(
+                        color: Color(0xffFFD346), fontSize: 18),
+                  ),
+                  onPressed: () {
+                    final save = Dialogbox(
+                      canceltext: "DISCARD",
+                      confirmtext: "SAVE",
+                      middletext: "Do you want to save the Note?",
+                      onconfirm: () {
+                        if (isEdit) controller.delNote(index);
+                        controller.addNote(
+                            titlecontroller.text, bodycontroller.text);
+                        Get.back();
+                        Get.back();
+                        Get.snackbar("", "",
+                            backgroundColor: Colors.white30,
+                            titleText: Text(
+                              "New Note ",
+                              style: GoogleFonts.varelaRound(fontSize: 17),
                             ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                          ),
-                          confirm: RaisedButton(
-                            onPressed: () {
-                              controller.addNote(
-                                  titlecontroller.text, bodycontroller.text);
-                              Get.back();
-                              Get.back();
-                              Get.snackbar(
-                                  "New Note ", "Your note has been saved.");
-                            },
-                            elevation: 10,
-                            color: Color(0xffFFD346),
-                            child: Text(
-                              "SAVE",
-                              style: GoogleFonts.aBeeZee(fontSize: 15),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ));
-                    },
-                  )))
+                            messageText: Text("Your note has been saved.",
+                                style: GoogleFonts.varelaRound(
+                                    fontSize: 13, color: Colors.grey[900])));
+                      },
+                    );
+                    save.dialogBox();
+                  }))
         ],
       ),
       backgroundColor: Color(0xff313131),
@@ -117,60 +105,20 @@ class NewNote extends StatelessWidget {
               ),
             )),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 23),
-        child: RaisedButton(
-          onPressed: () {
-            Get.defaultDialog(
-                backgroundColor: Colors.grey[900],
-                title: "",
-                middleText: "Are you sure you want to delete?",
-                middleTextStyle: GoogleFonts.varelaRound(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-                cancel: FlatButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text(
-                      "NO",
-                      style: GoogleFonts.aBeeZee(
-                          color: Colors.white, fontSize: 15),
-                    )),
-                confirm: RaisedButton(
-                  onPressed: () {
-                    controller.notes.remove(NoteModel(
-                        title: titlecontroller.text,
-                        body: bodycontroller.text,
-                        date: DateFormat('dd/MM/yyyy')
-                            .format(DateTime.now())
-                            .toString()));
-                    Get.back();
-                    Get.back();
-                  },
-                  child: Text(
-                    "YES",
-                    style: GoogleFonts.aBeeZee(fontSize: 15),
-                  ),
-                  elevation: 10,
-                  color: Color(0xffFFD346),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ));
-          },
-          color: Color(0xff626262),
-          elevation: 15,
-          shape: CircleBorder(),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Icon(
-              Icons.delete_outline,
-              size: 37,
-              color: Colors.white60,
-            ),
-          ),
-        ),
+      floatingActionButton: IconWidget(
+        icon: Icons.delete_outline,
+        onpressed: () {
+          final del = Dialogbox(
+              canceltext: "NO",
+              confirmtext: "YES",
+              middletext: "Are you sure that you want to delete?",
+              onconfirm: () {
+                controller.delNote(index);
+                Get.back();
+                Get.back();
+              });
+          del.dialogBox();
+        },
       ),
     );
   }
