@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notes/model/icon.dart';
+import 'package:notes/widgets/icon.dart';
 import 'package:notes/new_note.dart';
 import 'note_controller.dart';
 
@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
                   style: GoogleFonts.varelaRound(fontSize: 23),
                 ),
               ),
-              backgroundColor: Color(0xff313131),
+              backgroundColor: Color(0xff222122),
             ),
-            backgroundColor: Color(0xff313131),
+            backgroundColor: Color(0xff222122),
             body: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Obx(

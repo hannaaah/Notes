@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:notes/model/dialogbox.dart';
-import 'package:notes/model/icon.dart';
 import 'package:notes/note_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'widgets/dialogbox.dart';
+import 'widgets/icon.dart';
 
 class NewNote extends StatelessWidget {
   final TextEditingController titlecontroller =
@@ -25,7 +25,20 @@ class NewNote extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xff313131),
+        backgroundColor: Color(0xff222122),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10, top: 7),
+          child: FlatButton(
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 18.5,
+              color: Colors.white70,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ),
         actions: [
           Padding(
               padding: EdgeInsets.all(10),
@@ -33,7 +46,7 @@ class NewNote extends StatelessWidget {
                   child: Text(
                     "SAVE",
                     style: GoogleFonts.aBeeZee(
-                        color: Color(0xffFFD346), fontSize: 18),
+                        color: Color(0xffFFD338), fontSize: 18),
                   ),
                   onPressed: () {
                     final save = Dialogbox(
@@ -46,30 +59,22 @@ class NewNote extends StatelessWidget {
                             titlecontroller.text, bodycontroller.text);
                         Get.back();
                         Get.back();
-                        Get.snackbar("", "",
-                            backgroundColor: Colors.white30,
-                            titleText: Text(
-                              "New Note ",
-                              style: GoogleFonts.varelaRound(fontSize: 17),
-                            ),
-                            messageText: Text("Your note has been saved.",
-                                style: GoogleFonts.varelaRound(
-                                    fontSize: 13, color: Colors.grey[900])));
                       },
                     );
                     save.dialogBox();
                   }))
         ],
       ),
-      backgroundColor: Color(0xff313131),
+      backgroundColor: Color(0xff222122),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Container(
-            height: 350,
+            height: 355,
             color: Color(0xffFFD338),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: titlecontroller,
@@ -77,7 +82,7 @@ class NewNote extends StatelessWidget {
                     style: GoogleFonts.varelaRound(fontSize: 25),
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Title",
+                        hintText: "Enter Title",
                         hintStyle: TextStyle(fontSize: 25)),
                     cursorColor: Colors.grey[800],
                     cursorWidth: 1.5,
@@ -93,7 +98,7 @@ class NewNote extends StatelessWidget {
                     maxLines: null,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Write description here...",
+                        hintText: "Enter description here...",
                         hintStyle: TextStyle(
                           fontSize: 17,
                         )),
@@ -111,7 +116,7 @@ class NewNote extends StatelessWidget {
           final del = Dialogbox(
               canceltext: "NO",
               confirmtext: "YES",
-              middletext: "Are you sure that you want to delete?",
+              middletext: "Are you sure you want to delete?",
               onconfirm: () {
                 controller.delNote(index);
                 Get.back();

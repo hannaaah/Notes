@@ -13,7 +13,7 @@ class Dialogbox {
 
   dialogBox() {
     return Get.defaultDialog(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xff222122),
         title: "",
         middleText: middletext,
         middleTextStyle: GoogleFonts.varelaRound(

@@ -12,14 +12,13 @@ class IconWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: RaisedButton(
         onPressed: onpressed,
-        color: Color(0xff626263),
-        elevation: 15,
+        color: Colors.grey[800],
         shape: CircleBorder(),
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(8.0),
           child: Icon(
             icon,
-            size: 40,
+            size: 35,
             color: Colors.white60,
           ),
         ),

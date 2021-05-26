@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'model/note_model.dart';
+import 'note_model.dart';
 
 class NoteController extends GetxController {
   List<NoteModel> notes = [
