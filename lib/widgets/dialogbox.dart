@@ -20,7 +20,7 @@ class Dialogbox {
           color: Colors.white,
           fontSize: 20,
         ),
-        cancel: FlatButton(
+        cancel: TextButton(
             onPressed: () {
               Get.back();
             },
