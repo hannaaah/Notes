@@ -3,27 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:notes/controllers/note_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/dialogbox.dart';
-import '../widgets/icon.dart';
 
 // ignore: must_be_immutable
 class NewNote extends StatelessWidget {
-  final TextEditingController titlecontroller =
-      TextEditingController(text: Get.parameters['title']);
-  final TextEditingController bodycontroller =
-      TextEditingController(text: Get.parameters['body']);
+  final titlecontroller = TextEditingController(text: Get.parameters['title']);
+  final bodycontroller = TextEditingController(text: Get.parameters['body']);
 
   final bool isEdit = Get.parameters['body'] != null;
 
-  final int index = (Get.parameters['index'] == null)
-      ? 0
-      : int.parse(Get.parameters['index']);
+  final int index =
+      Get.parameters['index'] == null ? 0 : int.parse(Get.parameters['index']);
 
   NoteController controller = NoteController();
 
+  onBack() {
+    if ((bodycontroller.text == Get.parameters['body'] &&
+            titlecontroller.text == Get.parameters['title']) ||
+        bodycontroller.text == "")
+      Get.back();
+    else {
+      final save = Dialogbox(
+          canceltext: "DISCARD",
+          confirmtext: "SAVE",
+          middletext: "Hey, You like to save the Note?",
+          onconfirm: () {
+            if (isEdit) controller.delNote(index);
+            controller.addNote(titlecontroller.text, bodycontroller.text);
+            Get.back();
+            Get.back();
+          });
+      save.dialogBox();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
+    return WillPopScope(
+      onWillPop: () async {
+        onBack();
+        return false;
+      },
+      child: Scaffold(
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Color(0xff222122),
@@ -36,35 +57,36 @@ class NewNote extends StatelessWidget {
                 color: Colors.white70,
               ),
               onPressed: () {
-                Get.back();
+                onBack();
               },
             ),
           ),
-          actions: [
-            Padding(
-                padding: EdgeInsets.all(10),
-                child: TextButton(
-                    child: Text(
-                      "SAVE",
-                      style: GoogleFonts.aBeeZee(
-                          color: Color(0xffFFD338), fontSize: 18),
+          actions: isEdit
+              ? ([
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10, top: 10),
+                    child: IconButton(
+                      iconSize: 30,
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        final del = Dialogbox(
+                            canceltext: "NO",
+                            confirmtext: "YES",
+                            middletext: "Are you sure you want to delete?",
+                            onconfirm: () {
+                              controller.delNote(index);
+                              Get.back();
+                              Get.back();
+                            });
+                        del.dialogBox();
+                      },
                     ),
-                    onPressed: () {
-                      final save = Dialogbox(
-                        canceltext: "DISCARD",
-                        confirmtext: "SAVE",
-                        middletext: "Do you want to save the Note?",
-                        onconfirm: () {
-                          if (isEdit) controller.delNote(index);
-                          controller.addNote(
-                              titlecontroller.text, bodycontroller.text);
-                          Get.back();
-                          Get.back();
-                        },
-                      );
-                      save.dialogBox();
-                    }))
-          ],
+                  )
+                ])
+              : null,
         ),
         backgroundColor: Color(0xff222122),
         body: Padding(
@@ -74,23 +96,23 @@ class NewNote extends StatelessWidget {
               color: Color(0xffFFD338),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: titlecontroller,
-                      textCapitalization: TextCapitalization.sentences,
-                      style: GoogleFonts.varelaRound(fontSize: 25),
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Title",
-                          hintStyle: TextStyle(fontSize: 25)),
-                      cursorColor: Colors.grey[800],
-                      cursorWidth: 1.5,
-                      cursorHeight: 31,
-                    ),
-                    SingleChildScrollView(
-                      child: TextField(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: titlecontroller,
+                        textCapitalization: TextCapitalization.sentences,
+                        style: GoogleFonts.varelaRound(fontSize: 25),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Title",
+                            hintStyle: TextStyle(fontSize: 25)),
+                        cursorColor: Colors.grey[800],
+                        cursorWidth: 1.5,
+                        cursorHeight: 31,
+                      ),
+                      TextField(
                         controller: bodycontroller,
                         textCapitalization: TextCapitalization.sentences,
                         style: GoogleFonts.varelaRound(
@@ -110,27 +132,12 @@ class NewNote extends StatelessWidget {
                         cursorColor: Colors.grey[800],
                         cursorWidth: 1.5,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )),
         ),
-        floatingActionButton: isEdit
-            ? (IconWidget(
-                icon: Icons.delete_outline,
-                onpressed: () {
-                  final del = Dialogbox(
-                      canceltext: "NO",
-                      confirmtext: "YES",
-                      middletext: "Are you sure you want to delete?",
-                      onconfirm: () {
-                        controller.delNote(index);
-                        Get.back();
-                        Get.back();
-                      });
-                  del.dialogBox();
-                },
-              ))
-            : null);
+      ),
+    );
   }
 }

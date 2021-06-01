@@ -23,6 +23,7 @@ class Dialogbox {
         cancel: TextButton(
             onPressed: () {
               Get.back();
+              Get.back();
             },
             child: Text(
               canceltext,
