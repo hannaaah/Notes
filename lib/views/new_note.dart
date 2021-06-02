@@ -44,16 +44,16 @@ class NewNote extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Color(0xff222122),
           leading: Padding(
             padding: const EdgeInsets.only(left: 10, top: 7),
             child: IconButton(
+              splashColor: Color(0xff222122),
               icon: Icon(
                 Icons.arrow_back_ios,
-                size: 18.5,
+                size: 19,
                 color: Colors.white70,
               ),
               onPressed: () {
@@ -68,8 +68,8 @@ class NewNote extends StatelessWidget {
                     child: IconButton(
                       iconSize: 30,
                       icon: Icon(
-                        Icons.delete_outline,
-                        color: Colors.grey,
+                        Icons.delete_outline_outlined,
+                        color: Colors.white70,
                       ),
                       onPressed: () {
                         final del = Dialogbox(
@@ -92,47 +92,52 @@ class NewNote extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Container(
-              //   height: 355,
-              color: Color(0xffFFD338),
+              color: Color(0xffFFD335),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: titlecontroller,
-                        textCapitalization: TextCapitalization.sentences,
-                        style: GoogleFonts.varelaRound(fontSize: 25),
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Title",
-                            hintStyle: TextStyle(fontSize: 25)),
-                        cursorColor: Colors.grey[800],
-                        cursorWidth: 1.5,
-                        cursorHeight: 31,
-                      ),
-                      TextField(
-                        controller: bodycontroller,
-                        textCapitalization: TextCapitalization.sentences,
-                        style: GoogleFonts.varelaRound(
-                          wordSpacing: 4,
-                          fontSize: 17,
+                child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (overScroll) {
+                    overScroll.disallowGlow();
+                    return;
+                  },
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: titlecontroller,
+                          textCapitalization: TextCapitalization.sentences,
+                          style: GoogleFonts.varelaRound(fontSize: 25),
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Title",
+                              hintStyle: TextStyle(fontSize: 25)),
+                          cursorColor: Colors.grey[800],
+                          cursorWidth: 1.5,
+                          cursorHeight: 31,
                         ),
-                        keyboardType: TextInputType.multiline,
-                        minLines: 13,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Write something here...",
-                            hintStyle: TextStyle(
-                              fontSize: 17,
-                            )),
-                        cursorHeight: 25,
-                        cursorColor: Colors.grey[800],
-                        cursorWidth: 1.5,
-                      ),
-                    ],
+                        TextField(
+                          controller: bodycontroller,
+                          textCapitalization: TextCapitalization.sentences,
+                          style: GoogleFonts.varelaRound(
+                            wordSpacing: 4,
+                            fontSize: 17,
+                          ),
+                          keyboardType: TextInputType.multiline,
+                          minLines: 13,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Write something here...",
+                              hintStyle: TextStyle(
+                                fontSize: 17,
+                              )),
+                          cursorHeight: 25,
+                          cursorColor: Colors.grey[800],
+                          cursorWidth: 1.5,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )),

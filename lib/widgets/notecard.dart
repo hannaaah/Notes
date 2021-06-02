@@ -15,7 +15,7 @@ class NoteCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Color(0xffFFCB35), borderRadius: BorderRadius.circular(10)),
-        height: 135,
+        //  height: 135,
         child: GestureDetector(
           onTap: () {
             Get.toNamed(
@@ -26,8 +26,9 @@ class NoteCard extends StatelessWidget {
                 color: Color(0xffFFCB35),
                 borderRadius: BorderRadius.circular(12)),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(13, 13, 13, 0),
+              padding: EdgeInsets.fromLTRB(13, 13, 13, 10),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -42,20 +43,21 @@ class NoteCard extends StatelessWidget {
                   ),
                   Text(
                     note.body,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.varelaRound(
                       fontSize: 15,
                     ),
                   ),
                   SizedBox(
-                    height: 37,
+                    height: 33,
                   ),
                   Text(
                     note.date,
                     style: GoogleFonts.varelaRound(
-                        color: Colors.black38,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w200),
+                      color: Colors.black38,
+                      fontSize: 12,
+                    ),
                   )
                 ],
               ),

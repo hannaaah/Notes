@@ -17,8 +17,8 @@ class Home extends StatelessWidget {
           title: Padding(
             padding: const EdgeInsets.only(top: 15),
             child: Text(
-              "Notes",
-              style: GoogleFonts.varelaRound(fontSize: 23),
+              "NOTES",
+              style: GoogleFonts.varelaRound(fontSize: 20),
             ),
           ),
           backgroundColor: Color(0xff222122),
@@ -30,17 +30,27 @@ class Home extends StatelessWidget {
               valueListenable: noteBox.listenable(),
               builder: (context, noteBox, _) {
                 if (noteBox.values.isEmpty)
-                  return Center();
+                  return Center(
+                      child: Text("No notes to display!",
+                          style: GoogleFonts.varelaRound(
+                            color: Colors.grey[700],
+                          )));
                 else
-                  return ListView.builder(
-                      itemCount: noteBox.length,
-                      itemBuilder: (context, index) {
-                        final note = noteBox.getAt(index);
-                        return NoteCard(
-                          index: index,
-                          note: note,
-                        );
-                      });
+                  return NotificationListener<OverscrollIndicatorNotification>(
+                    onNotification: (overScroll) {
+                      overScroll.disallowGlow();
+                      return;
+                    },
+                    child: ListView.builder(
+                        itemCount: noteBox.length,
+                        itemBuilder: (context, index) {
+                          final note = noteBox.getAt(index);
+                          return NoteCard(
+                            index: index,
+                            note: note,
+                          );
+                        }),
+                  );
               }),
         ),
         floatingActionButton: IconWidget(
