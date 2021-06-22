@@ -6,9 +6,13 @@ import '../model/notemodel.dart';
 class NoteController extends GetxController {
   Box<dynamic> notes = Hive.box("Notes");
 
+  NoteModel getNote(int index) {
+    return notes.getAt(index);
+  }
+
   void addNote(String title, String body) {
     final newNote = NoteModel(
-        title: title == "" ? "No title" : title,
+        title: title,
         body: body,
         date: DateFormat('dd MMM, yyyy').format(DateTime.now()).toString());
     if (notes.length != 0) {

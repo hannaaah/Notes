@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:notes/widgets/icon.dart';
 import 'package:notes/widgets/notecard.dart';
-import '../widgets/icon.dart';
 
 class Home extends StatelessWidget {
   Box<dynamic> noteBox = Hive.box("Notes");
@@ -53,10 +53,10 @@ class Home extends StatelessWidget {
                   );
               }),
         ),
-        floatingActionButton: IconWidget(
+        floatingActionButton: ButttonIcon(
             icon: Icons.add_rounded,
             onpressed: () {
               Get.toNamed("Newnote");
-            }));
+            }).floatingIcon());
   }
 }

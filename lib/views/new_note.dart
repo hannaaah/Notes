@@ -1,39 +1,69 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/controllers/note_controller.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:notes/model/notemodel.dart';
+import 'package:notes/themes/themes.dart';
+import 'package:notes/widgets/icon.dart';
 import '../widgets/dialogbox.dart';
 
-// ignore: must_be_immutable
 class NewNote extends StatelessWidget {
-  final titlecontroller = TextEditingController(text: Get.parameters['title']);
-  final bodycontroller = TextEditingController(text: Get.parameters['body']);
+  NoteModel note;
+  int index;
+  bool toEdit;
+  TextEditingController titlecontroller = TextEditingController();
+  TextEditingController bodycontroller = TextEditingController();
 
-  final bool isEdit = Get.parameters['body'] != null;
+  NoteController controller = Get.put(NoteController());
 
-  final int index =
-      Get.parameters['index'] == null ? 0 : int.parse(Get.parameters['index']);
+  NewNote({this.index}) {
+    toEdit = (index != null);
+    if (toEdit) {
+      note = controller.getNote(index);
+      titlecontroller.text = note.title;
+      bodycontroller.text = note.body;
+    }
+  }
 
-  NoteController controller = NoteController();
+  saveNote() {
+    Dialogbox(
+        canceltext: "DISCARD",
+        confirmtext: "SAVE",
+        middletext: "Hey, You like to save the Note?",
+        onconfirm: () {
+          if (toEdit) controller.delNote(index);
+          controller.addNote(titlecontroller.text, bodycontroller.text);
+          Get.back();
+          Get.back();
+        }).dialogBox();
+  }
+
+  deleteNote() {
+    Dialogbox(
+        canceltext: "NO",
+        confirmtext: "YES",
+        middletext: "Are you sure you want to delete?",
+        onconfirm: () {
+          controller.delNote(index);
+          Get.back();
+          Get.back();
+        }).dialogBox();
+  }
 
   onBack() {
-    if ((bodycontroller.text == Get.parameters['body'] &&
-            titlecontroller.text == Get.parameters['title']) ||
-        bodycontroller.text == "")
+    if (toEdit) {
+      note = controller.getNote(index);
+      if (titlecontroller.text == note.title &&
+          bodycontroller.text == note.body)
+        Get.back();
+      else if (bodycontroller.text == "" && titlecontroller.text == "") {
+        controller.delNote(index);
+        Get.back();
+      } else
+        saveNote();
+    } else if (bodycontroller.text == "" && titlecontroller.text == "")
       Get.back();
-    else {
-      final save = Dialogbox(
-          canceltext: "DISCARD",
-          confirmtext: "SAVE",
-          middletext: "Hey, You like to save the Note?",
-          onconfirm: () {
-            if (isEdit) controller.delNote(index);
-            controller.addNote(titlecontroller.text, bodycontroller.text);
-            Get.back();
-            Get.back();
-          });
-      save.dialogBox();
-    }
+    else
+      saveNote();
   }
 
   @override
@@ -49,41 +79,24 @@ class NewNote extends StatelessWidget {
           backgroundColor: Color(0xff222122),
           leading: Padding(
             padding: const EdgeInsets.only(left: 10, top: 7),
-            child: IconButton(
-              splashColor: Color(0xff222122),
-              icon: Icon(
-                Icons.arrow_back_ios,
-                size: 19,
-                color: Colors.white70,
-              ),
-              onPressed: () {
+            child: ButttonIcon(
+              icon: Icons.arrow_back_ios,
+              size: 20,
+              onpressed: () {
                 onBack();
               },
-            ),
+            ).appbarIcons(),
           ),
-          actions: isEdit
+          actions: toEdit
               ? ([
                   Padding(
                     padding: const EdgeInsets.only(right: 10, top: 10),
-                    child: IconButton(
-                      iconSize: 30,
-                      icon: Icon(
-                        Icons.delete_outline_outlined,
-                        color: Colors.white70,
-                      ),
-                      onPressed: () {
-                        final del = Dialogbox(
-                            canceltext: "NO",
-                            confirmtext: "YES",
-                            middletext: "Are you sure you want to delete?",
-                            onconfirm: () {
-                              controller.delNote(index);
-                              Get.back();
-                              Get.back();
-                            });
-                        del.dialogBox();
+                    child: ButttonIcon(
+                      icon: Icons.delete_outline_outlined,
+                      onpressed: () {
+                        deleteNote();
                       },
-                    ),
+                    ).appbarIcons(),
                   )
                 ])
               : null,
@@ -107,11 +120,11 @@ class NewNote extends StatelessWidget {
                         TextField(
                           controller: titlecontroller,
                           textCapitalization: TextCapitalization.sentences,
-                          style: GoogleFonts.varelaRound(fontSize: 25),
+                          style: Themes.titleStyle,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Title",
-                              hintStyle: TextStyle(fontSize: 25)),
+                              hintStyle: Themes.titleStyle),
                           cursorColor: Colors.grey[800],
                           cursorWidth: 1.5,
                           cursorHeight: 31,
@@ -119,19 +132,14 @@ class NewNote extends StatelessWidget {
                         TextField(
                           controller: bodycontroller,
                           textCapitalization: TextCapitalization.sentences,
-                          style: GoogleFonts.varelaRound(
-                            wordSpacing: 4,
-                            fontSize: 17,
-                          ),
+                          style: Themes.editBodyStyle,
                           keyboardType: TextInputType.multiline,
                           minLines: 13,
                           maxLines: null,
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Write something here...",
-                              hintStyle: TextStyle(
-                                fontSize: 17,
-                              )),
+                              hintStyle: Themes.editBodyStyle),
                           cursorHeight: 25,
                           cursorColor: Colors.grey[800],
                           cursorWidth: 1.5,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:notes/model/notemodel.dart';
+import 'package:notes/themes/themes.dart';
+import 'package:notes/views/new_note.dart';
 
 class NoteCard extends StatelessWidget {
   final index;
@@ -15,11 +16,9 @@ class NoteCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             color: Color(0xffFFCB35), borderRadius: BorderRadius.circular(10)),
-        //  height: 135,
         child: GestureDetector(
           onTap: () {
-            Get.toNamed(
-                "Newnote?title=${note.title}&body=${note.body}&index=$index");
+            Get.to(NewNote(index: index));
           },
           child: Container(
             decoration: BoxDecoration(
@@ -31,33 +30,30 @@ class NoteCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    note.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.varelaRound(
-                      fontSize: 25,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  note.title == ""
+                      ? SizedBox()
+                      : Text(
+                          note.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: Themes.titleStyle,
+                        ),
+                  note.title == ""
+                      ? SizedBox()
+                      : SizedBox(
+                          height: 10,
+                        ),
                   Text(
                     note.body,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.varelaRound(
-                      fontSize: 15,
-                    ),
+                    style: Themes.bodyStyle,
                   ),
                   SizedBox(
-                    height: 33,
+                    height: 30,
                   ),
                   Text(
                     note.date,
-                    style: GoogleFonts.varelaRound(
-                      color: Colors.black38,
-                      fontSize: 12,
-                    ),
+                    style: Themes.dateStyle,
                   )
                 ],
               ),

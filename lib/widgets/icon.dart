@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class IconWidget extends StatelessWidget {
+class ButttonIcon {
   final icon;
+  final double size;
   final Function onpressed;
 
-  IconWidget({this.icon, this.onpressed});
+  ButttonIcon({this.icon, this.onpressed, this.size: 26});
 
-  @override
-  Widget build(BuildContext context) {
+  floatingIcon() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: RaisedButton(
@@ -15,7 +15,7 @@ class IconWidget extends StatelessWidget {
         color: Colors.grey[800],
         shape: CircleBorder(),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(7.0),
           child: Icon(
             icon,
             size: 35,
@@ -23,6 +23,18 @@ class IconWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  appbarIcons() {
+    return IconButton(
+      splashColor: Color(0xff222122),
+      icon: Icon(
+        icon,
+        size: size,
+        color: Colors.white70,
+      ),
+      onPressed: onpressed,
     );
   }
 }
