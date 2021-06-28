@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/themes/themes.dart';
 
 class ButttonIcon {
   final icon;
@@ -12,7 +13,7 @@ class ButttonIcon {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: RaisedButton(
         onPressed: onpressed,
-        color: Colors.grey[800],
+        color: Color(0xFF2f2f2f),
         shape: CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(7.0),
@@ -28,7 +29,7 @@ class ButttonIcon {
 
   appbarIcons() {
     return IconButton(
-      splashColor: Color(0xff222122),
+      splashColor: Themes.bgColor,
       icon: Icon(
         icon,
         size: size,

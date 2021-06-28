@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notes/themes/themes.dart';
 
 class Dialogbox {
   final middletext;
@@ -13,7 +14,7 @@ class Dialogbox {
 
   dialogBox() {
     return Get.defaultDialog(
-        backgroundColor: Color(0xff222122),
+        backgroundColor: Themes.bgColor,
         title: "",
         middleText: middletext,
         middleTextStyle: GoogleFonts.varelaRound(
@@ -36,7 +37,7 @@ class Dialogbox {
             style: GoogleFonts.aBeeZee(fontSize: 15),
           ),
           elevation: 10,
-          color: Color(0xffFFD346),
+          color: Themes.noteCardColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ));
   }

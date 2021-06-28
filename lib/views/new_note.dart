@@ -76,7 +76,7 @@ class NewNote extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Color(0xff222122),
+          backgroundColor: Themes.bgColor,
           leading: Padding(
             padding: const EdgeInsets.only(left: 10, top: 7),
             child: ButttonIcon(
@@ -101,11 +101,11 @@ class NewNote extends StatelessWidget {
                 ])
               : null,
         ),
-        backgroundColor: Color(0xff222122),
+        backgroundColor: Themes.bgColor,
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Container(
-              color: Color(0xffFFD335),
+              color: Themes.noteCardColor,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: NotificationListener<OverscrollIndicatorNotification>(
